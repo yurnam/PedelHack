@@ -13,6 +13,7 @@ Die Schaltung besteht neben dem Arduino aus zwei Spulen, einem Spannungsteiler u
 
 Für meinen Versuch habe ich die folgenden Werte benutzt es können aber beliebige gewählt werden.
 
+
 ![alt text](https://raw.githubusercontent.com/yurnam/PedelHack/master/Schaltplan.png)
 
 
