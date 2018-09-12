@@ -15,7 +15,7 @@ Für meinen Versuch habe ich die folgenden Werte benutzt es können aber beliebi
 
 
 ![alt text](https://raw.githubusercontent.com/yurnam/PedelHack/master/Schaltplan.png)
-
+ 
 
 # Funktion :
 
