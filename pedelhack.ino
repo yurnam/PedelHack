@@ -23,7 +23,7 @@ void loop(){                                                     //
       digitalWrite(OutputCoilPin, HIGH);                   //            Sende ein Signal an den Tacho.   2 = 25 KM/h  4 = 50 KM/h  6 = ?   8 = 100KM/h ?         
       Serial.println("Tachosignal wurde gesendet");       //
       delay(9);                                          //              Delays :  Ein Delay von 100ms ergibt auf dem Display eine Max. Geschwindigkeit von ca. 40 KM/h  (80 als tatsächliche Geschwindigkeit) 
-      digitalWrite(OutputCoilPin, LOW);                 //               Klingt unrealistisch? Ist es auch. Diese Information dient nur als Beispiel
+      digitalWrite(OutputCoilPin, LOW);                 //             
     }   
     
     if (x%2 != 0){
