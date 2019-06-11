@@ -14,7 +14,7 @@ const int tachopin = 4;   // Pin der zum Tacho führt
 const int reedpin = 2;    // Pin der zum Reedschalter (Sensor) führt
 const int red = 1;
 
-const int vel = 350;  // 350 ms ~ 25 KM / h je nach Radgröße
+const int v = 350;  // 350 ms ~ 25 KM / h je nach Radgröße
 
 
 
@@ -28,16 +28,18 @@ volatile int newtime;
 
 void setup(){
                                   // Pins Initialisieren
-  int a = 0;
+                    
   pinMode(tachopin, OUTPUT);
   pinMode(red, OUTPUT);
   pinMode(reedpin, INPUT);
-  
-  while(a < 40){digitalWrite(red, HIGH);
+
+  int b = 0; 
+  while(b < 20){           // Kurz blinken
+  digitalWrite(red, HIGH);  
   delay(50);
   digitalWrite(red, LOW);
   delay(50); 
-  a++;
+  b++;
   }
   
 }
@@ -46,16 +48,16 @@ void setup(){
 void tacho(int a){                  // Diese Funktion berechnet die Geschwindigkeit und sendet das Tachosignal
 
  
-  newtime = time - lasttime;        // Geschwindigkeit berechnen
+  newtime = time - lasttime;        // Zeit zwischen den Impulsen messen
   lasttime = time;
   time = millis();
 
-  if (newtime < vel) {m = 2;} 
-  else {m = 1;}
+  if (newtime < v) {m = 2;}     // Wenn Zeit zwischen den Impulsen länger als definiert, Modus auf 2 setzen
+  else {m = 1;}                   // sonst Modus 1
  
   if (m == 1){digitalWrite(red, LOW);}  //  Wenn der Modus umschaltet die Rote LED (Pin 1 am Digispark) einschalten
 
-  if(a % m == 0) 
+  if(a % m == 0)                      // m wird hier direkt fürs rechnen benutzt   wenn Modus 1 ergibt die Modulorechnung immer 0, im 2. Modus nur jedes 2. mal
   {
   digitalWrite(tachopin, HIGH);
   delay(20);                            // Einen kurzen Impuls an den Tacho senden
@@ -70,7 +72,7 @@ void loop(){
   {
     laststate = 0;
     tacho(i);                       // Die Zählervariable an tacho() weitergeben
-    i ++;
+    i++;
   }
 
   if (laststate == 0 && state == 1){laststate = 1;}  // Flankensteuerung zurücksetzen
