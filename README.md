@@ -11,7 +11,7 @@ Für diese Schaltung werden nur ein Digispark Board, und zwei Widerstände benö
 Für meinen Versuch habe ich die folgenden Werte benutzt es können jedoch beliebige gewählt werden.
 
 
-![alt text](https://raw.githubusercontent.com/yurnam/PedelHack/master/Schaltung.png)
+![schematic](https://raw.githubusercontent.com/yurnam/PedelHack/master/Schaltung-neu.png)
  
 
 # Funktion :
