@@ -1,43 +1,80 @@
 
+
 /*
- *PedelHack by YurNam 
- *Halbiert die Frequenz des Tachosignals bei einem E-Bike sodass die 25Kmh-Grenze überschritten werden kann
- *
+
+  PedelHack V2 by YurNam
+
 */
 
 
+int laststate = 1;        // Variablen für die Flankensteuerung
+int state = 1;
+volatile int i = 0;
+const int tachopin = 4;   // Pin der zum Tacho führt
+const int reedpin = 2;    // Pin der zum Reedschalter (Sensor) führt
+const int red = 1;
+
+const int vel = 350;  // 350 ms ~ 25 KM / h je nach Radgröße
 
 
-const int OutputCoilPin = 2;                                           // Pin an dem Die Spule angeschlossen wird
-int x = 1;                                                            //  Der Zählervariable x wird der Wert 1 zugewiesen
-void setup() {                                                       //
-  pinMode(OutputCoilPin, OUTPUT);                                   //    Setze OutputCoilPin auf Output
-  Serial.begin(9600);                                              //
-}                                                                 //
-void loop(){                                                     //
-  int InputCoilValue = analogRead(A0);                          //       Überwache die Spannung am Pin A0 und weise den Wert der Variable InputCoilValue zu. Je nachdem Welche Spule als Sensor benutzt wird muss InputCoilValue danach angepasst werden
-  if (InputCoilValue >= 1){                                    //        Wenn InputCoilValue grösser als 1 ist dann sollst du :   
-    Serial.println("Signal wurde Empfangen");                 //
-    x++;                                                     //          x um 1 erhöhen.
-    if (x%4 == 0){                                          //           und  wenn x geteilt durch 4  keinen Rest ergibt dann:    
-      digitalWrite(OutputCoilPin, HIGH);                   //            Sende ein Signal an den Tacho.   2 = 25 KM/h  4 = 50 KM/h  6 = ?   8 = 100KM/h ?         
-      Serial.println("Tachosignal wurde gesendet");       //
-      delay(9);                                          //              Delays :  Ein Delay von 100ms ergibt auf dem Display eine Max. Geschwindigkeit von ca. 40 KM/h  (80 als tatsächliche Geschwindigkeit) 
-      digitalWrite(OutputCoilPin, LOW);                 //             
-    }   
-    
-    if (x%2 != 0){
-      Serial.println("Tachosignal wurde nicht gesendet");
-    }
+
+int m = 1;          // Variable für den Modus  1 = Normal (< 25 Kmh) 2 = Speedmodus (> 25Kmh)
+
+volatile long int lasttime = 0;   // Die Variablen für die Zeit initialisieren
+volatile long int time = 0;
+volatile int newtime;
+
+
+
+void setup(){
+                                  // Pins Initialisieren
+  int a = 0;
+  pinMode(tachopin, OUTPUT);
+  pinMode(red, OUTPUT);
+  pinMode(reedpin, INPUT);
   
-  }                            // Damit wir nicht irgendwann einen sinnlos hohen Wert bei x haben, soll die Variable bei 1025 wieder auf 1 gesetzt werden.
-   if (x > 1024){             // Wenn x größer als 1024 dann:                                
-    x = 1;                   // Setze x wieder auf 1
-    } 
-delay(1);
+  while(a < 40){digitalWrite(red, HIGH);
+  delay(50);
+  digitalWrite(red, LOW);
+  delay(50); 
+  a++;
+  }
+  
 }
 
 
+void tacho(int a){                  // Diese Funktion berechnet die Geschwindigkeit und sendet das Tachosignal
 
-// 
-// 
+ 
+  newtime = time - lasttime;        // Geschwindigkeit berechnen
+  lasttime = time;
+  time = millis();
+
+  if (newtime < vel) {m = 2;} 
+  else {m = 1;}
+ 
+  if (m == 1){digitalWrite(red, LOW);}  //  Wenn der Modus umschaltet die Rote LED (Pin 1 am Digispark) einschalten
+
+  if(a % m == 0) 
+  {
+  digitalWrite(tachopin, HIGH);
+  delay(20);                            // Einen kurzen Impuls an den Tacho senden
+  digitalWrite(tachopin, LOW);
+  }
+}
+
+
+void loop(){
+  state = digitalRead(reedpin);
+  if (laststate == 1 && state == 0)   // Bei Fallender Flanke zählen
+  {
+    laststate = 0;
+    tacho(i);                       // Die Zählervariable an tacho() weitergeben
+    i ++;
+  }
+
+  if (laststate == 0 && state == 1){laststate = 1;}  // Flankensteuerung zurücksetzen
+  if (1 > 1023){i = 0;}                              // Sinnlos hohen Zählerwert vermeiden
+
+
+}
