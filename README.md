@@ -7,10 +7,6 @@ Arduino Projekt mit dem man die 25 KM/h Grenze bei Pedelecs umgehen kann
 Für diese Schaltung werden nur ein Digispark Board, und zwei Widerstände benötigt.
 
 
-
-Für meinen Versuch habe ich die folgenden Werte benutzt es können jedoch beliebige gewählt werden.
-
-
 ![schematic](https://raw.githubusercontent.com/yurnam/PedelHack/master/Schaltung-neu.png)
  
 
