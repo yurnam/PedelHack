@@ -77,7 +77,7 @@ void loop(){
   if (laststate == 0 && state == 1){laststate = 1;} // Wenn vorher 0 und jetzt 1 dann wieder Wert speichern  (Magnet ist nicht mehr am Reedschalter)  
 
    
-  if (1 > 1023){i = 0;}                              // Sinnlos hohen Zählerwert vermeiden
+  if (i > 1023){i = 0;}                              // Sinnlos hohen Zählerwert vermeiden
 
 
 }
